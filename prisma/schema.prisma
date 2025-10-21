@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model sagesclient {
+  id                   String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code                 String              @unique @db.VarChar(10)
+  legalname            String              @db.VarChar(100)
+  shortname            String?             @db.VarChar(50)
+  address              String?             @db.VarChar(100)
+  website              String?             @db.VarChar(100)
+  phone                String?             @db.VarChar(50)
+  email                String?             @db.VarChar(50)
+  primarycontactname   String?             @db.VarChar(50)
+  primarycontactemail  String?             @db.VarChar(50)
+  primarycontactphone  String?             @db.VarChar(50)
+  othercontactinfos    String?             @db.VarChar(50)
+  notes                String?             @db.VarChar(1000)
+  createdby            String              @db.VarChar(25)
+  datecreated          DateTime            @db.Timestamptz(6)
+  modifiedby           String?             @db.VarChar(25)
+  datemodified         DateTime?           @db.Timestamptz(6)
+  schoolsystemid       String              @db.Uuid
+  neon_project_details String?             @db.VarChar
+  sagesschoolsystem    sagesschoolsystem   @relation(fields: [schoolsystemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  sagesclientconfig    sagesclientconfig[]
+  sagesclientmodule    sagesclientmodule[]
+}
+
+model sagesclientconfig {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  effectivedate DateTime    @db.Date
+  expirydate    DateTime?   @db.Date
+  clientid      String      @db.Uuid
+  configid      String      @db.Uuid
+  numericvalue  Int?
+  stringvalue   String?     @db.VarChar(1000)
+  notes         String?     @db.VarChar(1000)
+  createdby     String      @db.VarChar(25)
+  datecreated   DateTime    @db.Timestamptz(6)
+  modifiedby    String?     @db.VarChar(25)
+  datemodified  DateTime?   @db.Timestamptz(6)
+  sagesclient   sagesclient @relation(fields: [clientid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  sagesconfig   sagesconfig @relation(fields: [configid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model sagesclientmodule {
+  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  effectivedate            DateTime                   @db.Date
+  expirydate               DateTime?                  @db.Date
+  clientid                 String                     @db.Uuid
+  moduleid                 String                     @db.Uuid
+  notes                    String?                    @db.VarChar(1000)
+  createdby                String                     @db.VarChar(25)
+  datecreated              DateTime                   @db.Timestamptz(6)
+  modifiedby               String?                    @db.VarChar(25)
+  datemodified             DateTime?                  @db.Timestamptz(6)
+  sagesclient              sagesclient                @relation(fields: [clientid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  sagesmodule              sagesmodule                @relation(fields: [moduleid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  sagesclientmodulepricing sagesclientmodulepricing[]
+}
+
+model sagesclientmodulepayment {
+  id                       String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  paymentdate              DateTime                 @db.Date
+  amount                   Int
+  clientmodulepricingid    String                   @db.Uuid
+  notes                    String?                  @db.VarChar(1000)
+  createdby                String                   @db.VarChar(25)
+  datecreated              DateTime                 @db.Timestamptz(6)
+  modifiedby               String?                  @db.VarChar(25)
+  datemodified             DateTime?                @db.Timestamptz(6)
+  sagesclientmodulepricing sagesclientmodulepricing @relation(fields: [clientmodulepricingid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model sagesclientmodulepricing {
+  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  effectivedate            DateTime                   @db.Date
+  expirydate               DateTime?                  @db.Date
+  baseprice                Int
+  annualfees               Int
+  discountrate             Int
+  clientmoduleid           String                     @db.Uuid
+  notes                    String?                    @db.VarChar(1000)
+  createdby                String                     @db.VarChar(25)
+  datecreated              DateTime                   @db.Timestamptz(6)
+  modifiedby               String?                    @db.VarChar(25)
+  datemodified             DateTime?                  @db.Timestamptz(6)
+  sagesclientmodulepayment sagesclientmodulepayment[]
+  sagesclientmodule        sagesclientmodule          @relation(fields: [clientmoduleid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model sagesconfig {
+  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code              String              @unique @db.VarChar(20)
+  name              String              @db.VarChar(100)
+  description       String?             @db.VarChar(1000)
+  createdby         String              @db.VarChar(25)
+  datecreated       DateTime            @db.Timestamptz(6)
+  modifiedby        String?             @db.VarChar(25)
+  datemodified      DateTime?           @db.Timestamptz(6)
+  sagesclientconfig sagesclientconfig[]
+}
+
+model sagesmodule {
+  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code              String              @unique @db.VarChar(10)
+  name              String              @db.VarChar(100)
+  description       String?             @db.VarChar(1000)
+  createdby         String              @db.VarChar(25)
+  datecreated       DateTime            @db.Timestamptz(6)
+  modifiedby        String?             @db.VarChar(25)
+  datemodified      DateTime?           @db.Timestamptz(6)
+  sagesclientmodule sagesclientmodule[]
+}
+
+model sagesschoolsystem {
+  id                   String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code                 String        @unique @db.VarChar(10)
+  name                 String        @db.VarChar(100)
+  description          String?       @db.VarChar(1000)
+  createdby            String        @db.VarChar(25)
+  datecreated          DateTime      @db.Timestamptz(6)
+  modifiedby           String?       @db.VarChar(25)
+  datemodified         DateTime?     @db.Timestamptz(6)
+  api_url              String?       @db.VarChar
+  neon_project_details String?       @db.VarChar
+  sagesclient          sagesclient[]
+}
