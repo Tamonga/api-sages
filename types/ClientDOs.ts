@@ -43,3 +43,20 @@ export function ToClientDO(sc:sagesclient) : ClientDO {
         datemodified:           sc.datemodified
     }
 }
+
+export type ClientCreateDO = {
+    code:                   string;
+    legalname:              string;
+    shortname:              string | null; 
+    address:                string | null;    
+    website:                string | null; 
+    phone:                  string | null; 
+    email:                  string | null; 
+    primarycontactname:     string | null; 
+    primarycontactemail:    string | null; 
+    primarycontactphone:    string | null; 
+    othercontactinfos:      string | null;  
+    notes:                  string | null;
+    schoolsystemid:       string;          
+    createdby:              string;
+}
