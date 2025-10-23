@@ -131,5 +131,6 @@ model sagesschoolsystem {
   datemodified         DateTime?     @db.Timestamptz(6)
   api_url              String?       @db.VarChar
   neon_project_details String?       @db.VarChar
+  active               Boolean       @default(false)
   sagesclient          sagesclient[]
 }

@@ -9,6 +9,63 @@ import { SchoolSystemDO, ToSchoolSystemDO } from "./types/SchoolSystemDOs";
 
 const SagesFactoryErrorLabel = "Erreur SagesFactory - ";
 
+export async function getClientByCode(clientCode:string) : Promise<ClientDO|null> {
+    try {
+        const connexion: SagesDbConnection = await checkConnection();
+        if (!connexion.isConnected || !connexion.client) {
+            throw new Error(SagesFactoryErrorLabel + "La connexion à la base de données a échoué: " + connexion.connectionMessage);
+        };
+        const client : PrismaClient = connexion.client;
+        const clientQueried = await client.sagesclient.findUnique({
+            where : {
+                code : clientCode
+            }
+        });
+        if (!clientQueried || clientQueried === null) return null;
+        return (ToClientDO(clientQueried));
+    }
+    catch(error) {
+        throw new Error(SagesFactoryErrorLabel + "getClientByCode : " + error);
+    }
+}
+
+export async function getAllSchoolSystems(clientCode:string) : Promise<SchoolSystemDO[]> {
+    try {
+        const connexion: SagesDbConnection = await checkConnection();
+        if (!connexion.isConnected || !connexion.client) {
+            throw new Error(SagesFactoryErrorLabel + "La connexion à la base de données a échoué: " + connexion.connectionMessage);
+        };
+        const client : PrismaClient = connexion.client;
+        const schoolSystemsQueried = await client.sagesschoolsystem.findMany({
+            where : {
+                active : true
+            }
+        });
+        const listSchoolSystems : SchoolSystemDO[] = [];
+        schoolSystemsQueried.forEach(ss => {
+            listSchoolSystems.push(ToSchoolSystemDO(ss));
+        });
+        return listSchoolSystems;
+    }
+    catch(error) {
+        throw new Error(SagesFactoryErrorLabel + "getAllSchoolSystems : " + error);
+    }
+}
+
+
+
+export async function checkClientCodeValidity(clientCode:string) : Promise<boolean> {
+    try {
+        const clientQueried = await getClientByCode(clientCode);
+        if (!clientQueried || clientQueried===null) return false;
+        return true;
+    }
+    catch(error) {
+        //Maybe some error management here for administrative reasons
+        return false;
+    }
+}
+
 export async function getSchoolSystemByCode(schoolSystemCode:string) : Promise<SchoolSystemDO|null> {
     try {
         const connexion: SagesDbConnection = await checkConnection();
