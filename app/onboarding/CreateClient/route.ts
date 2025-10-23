@@ -38,6 +38,6 @@ export async function POST(request: NextRequest)  {
     }
     catch(error) {
         //Maybe some error management here for administrative reasons
-        return NextResponse.json({message : error}, { status: 500 });
+        return NextResponse.json({message : "Erreur SAGES API (CreateClient) : " + error}, { status: 500 });
     }
 }
