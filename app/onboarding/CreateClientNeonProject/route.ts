@@ -13,8 +13,8 @@ export async function POST(request: NextRequest)  {
         if(!clientQueried) return NextResponse.json("Client non identifiable", { status: 400 });
         const schoolSystemQueried = await getSchoolSystemById(clientQueried.schoolsystemid);
         if(!schoolSystemQueried) return NextResponse.json("Système d'éducation non identifiable", { status: 400 });
-        const ProjectName = process.env.NEON_PROJECT_NAME_START! as string + "SAGES-" + schoolSystemQueried.code.toUpperCase() + clientQueried.code.toUpperCase() + 
-                            process.env.NEON_PROJECT_NAME_END! as string;;
+        const ProjectName = process.env.NEON_PROJECT_NAME_START! as string + schoolSystemQueried.code.toUpperCase() + "-" + clientQueried.code.toUpperCase() + 
+                            process.env.NEON_PROJECT_NAME_END! as string;
         const RegionId = process.env.NEON_PROJECT_CREATION_REGION! as string;
         const PlatformId = process.env.NEON_PROJECT_CREATION_PLATFORM! as string;
         const NeonAPIKey = process.env.NEON_BEARER_TOKEN! as string;
