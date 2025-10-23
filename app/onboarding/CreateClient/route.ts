@@ -19,7 +19,7 @@ export async function POST(request: NextRequest)  {
             primarycontactphone : body.primarycontactphone,    
             othercontactinfos : body.othercontactinfos,    
             notes : body.notes,                
-            schoolsystemid : body.schoolsystemId,       
+            schoolsystemid : body.schoolsystemid,       
             createdby : body.createdby   
         }
         //Mandatory information missing to create the client    
