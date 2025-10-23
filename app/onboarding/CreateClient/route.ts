@@ -23,7 +23,7 @@ export async function POST(request: NextRequest)  {
             createdby : body.createdby   
         }
         //Mandatory information missing to create the client    
-        if (!clientInfos.code || !clientInfos.legalname || clientInfos.schoolsystemid || !clientInfos.createdby) 
+        if (!clientInfos.code || !clientInfos.legalname || !clientInfos.schoolsystemid || !clientInfos.createdby) 
             return NextResponse.json("Requête invalide", { status: 400 });
         const isClientCodeExist = await checkClientCodeValidity(clientInfos.code);
         //The client code provided exists
