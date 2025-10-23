@@ -1,7 +1,7 @@
 import { checkClientCodeValidity } from "@/SagesFactory";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest)  {
+export async function POST(request: NextRequest)  {
     try {
         const body = await request.json();
         if(!body) return NextResponse.json("Requête invalide", { status: 400 });
