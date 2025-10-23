@@ -14,6 +14,6 @@ export async function GET(request: NextRequest)  {
     }
     catch(error) {
         //Maybe some error management here for administrative reasons
-        return NextResponse.json({message : error}, { status: 500 });
+        return NextResponse.json({message : "Erreur SAGES API : " + error}, { status: 500 });
     }
 }
