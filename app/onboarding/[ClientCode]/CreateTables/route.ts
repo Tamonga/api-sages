@@ -30,4 +30,5 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     catch(error){
         throw new Error("Erreur - Création de la table: " + error);
     }
+
 }

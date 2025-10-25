@@ -2,7 +2,7 @@ import { jwtVerify, SignJWT } from "jose";
 
 // Define the JWT secret. It's crucial to use a strong, environment-variable-based secret in production.
 // For demonstration, a placeholder is used.
-const secretKey = process.env.JWT_SCHOOL_SYSTEM_DB_SECRET;
+const secretKey = process.env.JWT_CLIENT_DB_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
 
 /**
