@@ -29,6 +29,26 @@ export async function getClientByCode(clientCode:string) : Promise<ClientDO|null
     }
 }
 
+export async function getClientNeonProjectDetails(clientId:string) : Promise<string|null> {
+    try {
+        const connexion: SagesDbConnection = await checkConnection();
+        if (!connexion.isConnected || !connexion.client) {
+            throw new Error(SagesFactoryErrorLabel + "La connexion à la base de données a échoué: " + connexion.connectionMessage);
+        };
+        const client : PrismaClient = connexion.client;
+        const clientQueried = await client.sagesclient.findUnique({
+            where : {
+                id : clientId
+            }
+        });
+        if (!clientQueried || clientQueried === null) return null;
+        return clientQueried.neon_project_details;
+    }
+    catch(error) {
+        throw new Error(SagesFactoryErrorLabel + "getClientNeonProjectDetails : " + error);
+    }
+}
+
 export async function getClientById(clientId:string) : Promise<ClientDO|null> {
     try {
         const connexion: SagesDbConnection = await checkConnection();
